@@ -31,6 +31,7 @@ class FormFirstPage extends Component{
 
 
   jobTitleSelector(){
+
     let jobTitlesVar = []
 
     if(this.props.nestedJobSectors){
@@ -48,6 +49,10 @@ class FormFirstPage extends Component{
       })
 
     }
+      console.log(jobTitlesVar)
+
+
+
     return jobTitlesVar.map((job_title)=>{
       return <MenuItem key={job_title} value={job_title} primaryText={job_title}/>
     })
