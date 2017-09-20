@@ -23,41 +23,62 @@ const renderError = ({ input, meta: { touched, error } }) => (
 class FormFirstPage extends Component{
   constructor(props){
     super(props)
-    this.state = {
-      dropDownLoaded: false,
-    }
     this.jobSectorChosen = this.jobSectorChosen.bind(this)
     this.renderNestedJobSectors = this.renderNestedJobSectors.bind(this)
     this.jobTitleSelector = this.jobTitleSelector.bind(this)
   }
+
+
+
   jobTitleSelector(){
+    let jobTitlesVar = []
+
     if(this.props.nestedJobSectors){
       this.props.nestedJobSectors.map((nestedJobSector)=>{
 
-        console.log(nestedJobSector)
-      //if(nestedJobSector)
-      //return <MenuItem value={nestedJobSector.jobTitle} primaryText={nestedJobSector.jobTitle}/>
+        
+        if(nestedJobSector.sector_title == this.props.nested_job_sector_title){
+          if(nestedJobSector.job_titles){
+            nestedJobSector.job_titles.map((job_title)=>{
+              jobTitlesVar.push(job_title.job_title)
+            })
+          }
+        }
 
       })
 
     }
-
+    return jobTitlesVar.map((job_title)=>{
+      return <MenuItem key={job_title} value={job_title} primaryText={job_title}/>
+    })
   }
+
+
+
   jobSectorChosen(){
-    if(this.props.nested_job_sector_title && !this.state.dropDownLoaded){
-      this.setState({
-        dropDownLoaded:true
-      })
-      this.jobTitleSelector()
+    if(this.props.nested_job_sector_title){
+    return( 
+      <div>
+        <Field name="job_title_list" component={SelectField} 
+            selectedMenuItemStyle={{color: "#00BCD4"}} 
+            underlineStyle={{display: "none"}} errorStyle={{display: "none"}} 
+            hintText="Job Title">
+        {this.jobTitleSelector()}
+        </Field>   
+        <Field name="job_title_list" component={renderError} />
+      </div>
+      )
     }
   }
+
+
+
+
   renderNestedJobSectors(){
     if(this.props.nestedJobSectors){
       return this.props.nestedJobSectors.map((nestedJobSector)=>{
         return <MenuItem key={nestedJobSector.sector_id} value={nestedJobSector.sector_title} primaryText={nestedJobSector.sector_title}/>
       })
-    }else{
-      console.log('renderNestedJobSectors')
     }
   }
   componentWillMount(){
